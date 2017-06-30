@@ -1,20 +1,25 @@
 package by.rdtc.library.bean;
 
 public class Book {
-	private int id;
+	//private int id;
 	private String title;
 	private String author;
-	private Category category;
-	private int year;
-	private int pages;
+	//private Category category;
+	/*private int year;
+	private int pages;*/
 	
 	public Book(){
 		
 	}
-
-	public int getId() {
-		return id;
+	
+	public Book(String title,String author){
+		this.title=title;
+		this.author=author;
 	}
+
+	/*public int getId() {
+		return id;
+	}*/
 
 	public String getTitle() {
 		return title;
@@ -24,11 +29,11 @@ public class Book {
 		return author;
 	}
 
-	public Category getCategory() {
+	/*public Category getCategory() {
 		return category;
-	}
+	}*/
 
-	public int getYear() {
+	/*public int getYear() {
 		return year;
 	}
 
@@ -38,7 +43,7 @@ public class Book {
 
 	public void setId(int id) {
 		this.id = id;
-	}
+	}*/
 
 	public void setTitle(String title) {
 		this.title = title;
@@ -48,16 +53,16 @@ public class Book {
 		this.author = author;
 	}
 
-	public void setCategory(Category category) {
+	/*public void setCategory(Category category) {
 		this.category = category;
-	}
+	}*/
 
-	public void setYear(int year) {
+	/*public void setYear(int year) {
 		this.year = year;
 	}
 
 	public void setPages(int pages) {
 		this.pages = pages;
-	}
+	}*/
 			
 }
