@@ -1,32 +1,38 @@
 package by.rdtc.library.controller.impl;
 
+
+
+import java.util.List;
+
 import by.rdtc.library.bean.Book;
 import by.rdtc.library.controller.command.Command;
 import by.rdtc.library.service.LibraryService;
 import by.rdtc.library.service.ServiceFactory;
 import by.rdtc.library.service.exception.ServiceException;
 
-public class AddBook implements Command{
-	private final String paramDelimeter=" ";
+public class ShowAllBooks implements Command {
+
 	@Override
 	public String execute(String request) {
-		String title=null;
-		String author=null;
 		String response=null;
-		String[] param=request.split(paramDelimeter);
-		title=param[1];
-		author=param[2];
 		ServiceFactory serviceFactory=ServiceFactory.getInstance();
 		LibraryService libraryService=serviceFactory.getLibraryService();
-		Book book=new Book(title,author);
+		List<Book>books;
+		StringBuilder sb=new StringBuilder();
 		try {
-			libraryService.addNewBook(book);
-			response="Book was added";
+			books=libraryService.showAllBooks();
+			for(Book book:books){
+				sb.append(book.getId());
+				sb.append(" ");
+				sb.append(book.getTitle());
+				sb.append(" by ");
+				sb.append(book.getAuthor());
+				sb.append("\n");
+			}
+			response=sb.toString();
 		} catch (ServiceException e) {
-			response="Error during adding book procedure";
+			response="Error during show_books procedure";
 		}
-		
 		return response;
 	}
-	
 }

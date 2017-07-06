@@ -1,10 +1,10 @@
-package by.rdtc.library.service;
+package by.rdtc.library.service.iface;
 
 import by.rdtc.library.bean.User;
 import by.rdtc.library.service.exception.ServiceException;
 
 public interface UserService {
-	void signIn(String login,String password) throws ServiceException ;
-	void signOut(String login);
+	User signIn(String login,String password) throws ServiceException ;
+	User signOut();
 	void registration(User user) throws ServiceException;
 }

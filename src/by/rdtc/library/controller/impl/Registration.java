@@ -16,6 +16,7 @@ public class Registration implements Command {
 		String response=null;
 		
 		String[] param=request.split(" ");
+		System.out.println(param[1]+" "+param[2]+" "+param[3]);
 		ServiceFactory service=ServiceFactory.getInstance();
 		UserService userService=service.getUserService();
 		User user=new User(param[1],param[2],param[3]);

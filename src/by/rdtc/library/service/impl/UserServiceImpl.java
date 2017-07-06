@@ -2,22 +2,24 @@ package by.rdtc.library.service.impl;
 
 import by.rdtc.library.bean.User;
 import by.rdtc.library.dao.DAOFactory;
-import by.rdtc.library.dao.UserDAO;
 import by.rdtc.library.dao.exception.DAOException;
-import by.rdtc.library.service.UserService;
+import by.rdtc.library.dao.iface.UserDAO;
 import by.rdtc.library.service.exception.ServiceException;
+import by.rdtc.library.service.iface.UserService;
 
 public class UserServiceImpl implements UserService {
 
 	@Override
-	public void signIn(String login, String password) throws ServiceException  {
+	public User signIn(String login, String password) throws ServiceException  {
 		if(login == null || login.isEmpty()){
 			throw new ServiceException("Incorrect login");
 		}
 		DAOFactory daoObjectFactory=DAOFactory.getInstance();
 		UserDAO userDAO=daoObjectFactory.getUserDAO();
+		User user;
 		try {
-			userDAO.signIn(login, password);
+			user=userDAO.signIn(login, password);
+			return user;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -25,9 +27,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void signOut(String login) {
-		// TODO Auto-generated method stub
-		
+	public User signOut() {
+		User user=null;
+		return user;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class SQLDBWorker  {
 	
 	public Connection getConnection(){
 		Connection connection=null;
-			
+		
 			try {
 				connection=DriverManager.getConnection(URL,USER,PASSWORD);
 			} catch (SQLException e) {
@@ -38,10 +38,7 @@ public class SQLDBWorker  {
 		return connection;
 		
 	}
-	
-
-
-	
+		
 	
 
 }
