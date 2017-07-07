@@ -12,12 +12,5 @@ public class Main {
 		String task = in.nextLine();
 		System.out.println(controller.executeTask(task));
 		}
-		//System.out.println(controller.executeTask("sign_in iceman...92 12345"));
-		//System.out.println(controller.getUser().getLogin());
-		//System.out.println(controller.executeTask("sign_in jjOP qwerty"));
-		//System.out.println(controller.getUser().getLogin());
-		//System.out.println(controller.executeTask("ban_user jjOP"));
-		//System.out.println(controller.executeTask("all_books "));
-		//System.out.println(controller.executeTask("order_book 4"));
 	}
 }

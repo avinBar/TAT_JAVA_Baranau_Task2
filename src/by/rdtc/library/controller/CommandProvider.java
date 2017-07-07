@@ -4,17 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import by.rdtc.library.controller.command.Command;
-import by.rdtc.library.controller.impl.AdminToUser;
-import by.rdtc.library.controller.impl.Registration;
-import by.rdtc.library.controller.impl.ShowAllBooks;
-import by.rdtc.library.controller.impl.SignIn;
 import by.rdtc.library.controller.impl.WrongRequest;
 import by.rdtc.library.controller.impl.admin.AddBook;
 import by.rdtc.library.controller.impl.admin.BanUser;
 import by.rdtc.library.controller.impl.admin.ConfirmReturn;
+import by.rdtc.library.controller.impl.admin.DeleteBook;
 import by.rdtc.library.controller.impl.admin.DeliveryOrder;
 import by.rdtc.library.controller.impl.admin.UnbanUser;
 import by.rdtc.library.controller.impl.admin.UserToAdmin;
+import by.rdtc.library.controller.impl.guest.Registration;
+import by.rdtc.library.controller.impl.guest.ShowBooks;
+import by.rdtc.library.controller.impl.guest.SignIn;
+import by.rdtc.library.controller.impl.super_admin.AdminToUser;
+import by.rdtc.library.controller.impl.user.CancelOrder;
+import by.rdtc.library.controller.impl.user.EditProfile;
 import by.rdtc.library.controller.impl.user.OrderBook;
 import by.rdtc.library.controller.impl.user.SingOut;
 
@@ -30,16 +33,19 @@ final class CommandProvider {
 
 	CommandProvider() {
 		guestCommands.put(CommandName.SIGN_IN, new SignIn());
-		guestCommands.put(CommandName.ALL_BOOKS, new ShowAllBooks());
+		guestCommands.put(CommandName.SHOW_BOOKS, new ShowBooks());
 		guestCommands.put(CommandName.REGISTER, new Registration());
 		guestCommands.put(CommandName.WRONG_REQUEST, new WrongRequest());
 
 		userCommands.putAll(guestCommands);
 		userCommands.put(CommandName.SIGN_OUT, new SingOut());
+		userCommands.put(CommandName.EDIT_PROFILE, new EditProfile());
 		userCommands.put(CommandName.ORDER_BOOK, new OrderBook());
+		userCommands.put(CommandName.CANCEL_ORDER, new CancelOrder());
 
 		adminCommands.putAll(userCommands);
 		adminCommands.put(CommandName.ADD_BOOK, new AddBook());
+		adminCommands.put(CommandName.DELETE_BOOK, new DeleteBook());
 		adminCommands.put(CommandName.BAN_USER, new BanUser());
 		adminCommands.put(CommandName.UNBAN_USER, new UnbanUser());
 		adminCommands.put(CommandName.GIVE_ADMIN_ROLE, new UserToAdmin());
@@ -47,7 +53,7 @@ final class CommandProvider {
 		adminCommands.put(CommandName.RETURN_BOOK, new ConfirmReturn());
 
 		superAdminCommands.putAll(adminCommands);
-		superAdminCommands.put(CommandName.TAKE_ADMIN_ROLE, new AdminToUser());
+		superAdminCommands.put(CommandName.REMOVE_ADMIN, new AdminToUser());
 
 	}
 

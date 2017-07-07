@@ -1,24 +1,37 @@
 package by.rdtc.library.service.util;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Validator {
-	private static final String REGEXP = "[\\w\\W]{1,4000}";
-    private static final String TITLE = "[a-zA-Z0-9_ \\-]{4,64}";
-    private static final String NUMBER = "[\\d]+";
-    private static final String YEAR = "[1|2]{1}[9|0|1]{1}[\\d]{2}";
+
+    private static final String TITLE = "[a-zA-Z0-9_]{4,45}";
+    private static final String NAME = "[a-zA-Z]{4,45}";
     private static final String LOGIN = "[a-zA-Z_0-9]{3,16}";
-    private static final Pattern PATTERN_LOGIN = Pattern.compile(LOGIN);
-    private static final String EMAIL = "\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,6}";
-	
-    public static boolean validate(String... data) {
+    private static final String PASSWORD = "[A-z0-9_]+{5,10}";
+
+
+    public static boolean validateLogin(String login) {
         Matcher matcher;
-        for (String arg : data) {
-            matcher = PATTERN_REGEXP.matcher(arg);
-            if (!matcher.matches()) {
-                return false;
-            }
-        }
-        return true;
+        matcher = Pattern.compile(LOGIN).matcher(login);
+        return matcher.matches();
     }
+
+    public static boolean validatePassword(String password) {
+    	 Matcher matcher;
+         matcher = Pattern.compile(PASSWORD).matcher(password);
+         return matcher.matches();
+    }
+    
+    public static boolean validateTitle(String title) {
+   	 Matcher matcher;
+        matcher = Pattern.compile(TITLE).matcher(title);
+        return matcher.matches();
+   }
+
+	public static boolean validateName(String name) {
+     	 Matcher matcher;
+          matcher = Pattern.compile(NAME).matcher(name);
+          return matcher.matches();
+   }
 }

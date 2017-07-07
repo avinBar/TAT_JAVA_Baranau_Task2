@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import by.rdtc.library.bean.User;
 import by.rdtc.library.dao.exception.DAOException;
@@ -15,11 +14,10 @@ public class SQLUserDAO implements UserDAO {
 	private final static String SIGN_IN="SELECT * FROM user WHERE u_login=? and u_password=?";
 	private final static String USER_BY_LOGIN="SELECT * FROM user WHERE u_login=?";
 	private final static String REGISTRATION="INSERT INTO user (`u_login`, `u_password`, `u_name`, `u_type`) VALUES(?,?,?,'user')";
-	//private final static String VIEW_ALL_USERS =  "SELECT * FROM user";
 	private final static String BAN_USER="UPDATE user SET u_type='banned' WHERE u_login=?";
 	private final static String UNBAN_USER="UPDATE user SET u_type='user' WHERE u_login=?";
 	private final static String GIVE_ADMIN_ROLE="UPDATE user SET u_type='admin' WHERE u_login=?";
-	private final static String TAKE_ADMIN_ROLE="UPDATE user SET u_type='user' WHERE u_login=?";
+	private final static String REMOVE_ADMIN="UPDATE user SET u_type='user' WHERE u_login=?";
 	
 	@Override
 	public User signIn(String login, String password) throws DAOException {
@@ -49,7 +47,7 @@ public class SQLUserDAO implements UserDAO {
 	    }
 
 	@Override
-	public void registration(User user) throws DAOException {
+	public void register(User user) throws DAOException {
 		Connection connect=null;
 		PreparedStatement state=null;
 		try{
@@ -66,19 +64,6 @@ public class SQLUserDAO implements UserDAO {
 	    }
 		
 	
-
-	@Override
-	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<User> getAllBannedUsers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public void banUser(String login) throws DAOException {
 			Connection connect=null;
@@ -107,10 +92,6 @@ public class SQLUserDAO implements UserDAO {
 		}
 	}
 
-	@Override
-	public void deleteUser(User user) {
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public void giveAdminRole(String login) throws DAOException {
@@ -127,12 +108,12 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	@Override
-	public void takeAdminRole(String login) throws DAOException {
+	public void removeAdmin(String login) throws DAOException {
 		Connection connect=null;
 		PreparedStatement state=null;
 		try{
 			connect=SQLDBWorker.getInstance().getConnection();
-		    state=connect.prepareStatement(TAKE_ADMIN_ROLE);
+		    state=connect.prepareStatement(REMOVE_ADMIN);
 			state.setString(1, login);
 			state.executeUpdate();
 		}catch(SQLException e){
@@ -164,4 +145,5 @@ public class SQLUserDAO implements UserDAO {
 			throw new DAOException("User sql error");
 		}
 	}
+
 }

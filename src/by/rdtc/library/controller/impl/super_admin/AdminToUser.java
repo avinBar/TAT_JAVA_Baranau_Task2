@@ -1,13 +1,13 @@
-package by.rdtc.library.controller.impl.admin;
+package by.rdtc.library.controller.impl.super_admin;
 
 import java.util.Map;
 
 import by.rdtc.library.controller.command.Command;
 import by.rdtc.library.service.ServiceFactory;
 import by.rdtc.library.service.exception.ServiceException;
-import by.rdtc.library.service.iface.AdminService;
+import by.rdtc.library.service.iface.SuperAdminService;
 
-public class UnbanUser implements Command {
+public class AdminToUser implements Command {
 	private static final String LOGIN = "login";
 	private static final int PARAMS_NUMBER = 1;
 	
@@ -24,10 +24,10 @@ public class UnbanUser implements Command {
 		login=params.get(LOGIN);
 		
 		ServiceFactory sF=ServiceFactory.getInstance();
-		AdminService adminService=sF.getAdminService();
+		SuperAdminService superAdminService=sF.getSuperAdminService();
 		try {
-			adminService.unbanUser(login);
-			response="User "+login+" is unbanned";
+			superAdminService.removeAdmin(login);
+			response="User"+login+" is deprived of admin role";
 		} catch (ServiceException e) {
 			response="Error during unban procedure";
 		}

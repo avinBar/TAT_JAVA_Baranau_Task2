@@ -3,5 +3,6 @@ package by.rdtc.library.service.iface;
 import by.rdtc.library.service.exception.ServiceException;
 
 public interface SuperAdminService {
-	void takeAdminRole(String login) throws ServiceException;
+
+	void removeAdmin(String login)throws ServiceException;
 }

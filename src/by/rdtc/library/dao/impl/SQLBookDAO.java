@@ -16,7 +16,8 @@ public class SQLBookDAO implements BookDAO {
 	private static final String SHOW_ALL_BOOKS="SELECT * FROM book";
 	private static final String ADD_BOOK="INSERT INTO book (`b_title`, `b_author`) VALUES(?,?)";
 	private static final String CHANGE_BOOK_STATUS="UPDATE book SET b_status=? WHERE b_id=?";
-	private static final int DELETED=4;
+	private static final String DELETED="deleted";
+	
 	@Override
 	public void addBook(Book book) throws DAOException {
 		Connection connect=null;
@@ -39,18 +40,12 @@ public class SQLBookDAO implements BookDAO {
 		try{
 			connect=SQLDBWorker.getInstance().getConnection();
 			state=connect.prepareStatement(CHANGE_BOOK_STATUS);
-			state.setInt(1, DELETED);
+			state.setString(1, DELETED);
 			state.setInt(2, idBook);
 			state.executeUpdate();
 		}catch(SQLException e){
 			throw new DAOException(e);
 		}
-		
-	}
-
-	@Override
-	public void delete(Book book) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -79,5 +74,4 @@ public class SQLBookDAO implements BookDAO {
 		}
 		
 	}
-
 }

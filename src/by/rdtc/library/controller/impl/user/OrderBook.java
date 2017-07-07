@@ -1,6 +1,8 @@
 package by.rdtc.library.controller.impl.user;
 
 
+import java.util.Map;
+
 import by.rdtc.library.controller.Controller;
 import by.rdtc.library.controller.command.Command;
 import by.rdtc.library.service.ServiceFactory;
@@ -8,22 +10,32 @@ import by.rdtc.library.service.exception.ServiceException;
 import by.rdtc.library.service.iface.LibraryService;
 
 public class OrderBook implements Command {
-
+	private static final String ID_BOOK="idBook";
+	private static final int PARAMS_NUMBER=1;
+	
 	@Override
-	public String execute(String request) {
-		String response=null;
+	public String execute(Map<String,String> params) {
 		int idUser;
-		int idBook;
-		String[] param=request.split(" ");
+		String idBook;
+		
+		String response=null;
+		
+		if(params.size()!=PARAMS_NUMBER){
+			response="Wrong number of parameters";
+			return response;
+		}
 		idUser=Controller.getUser().getId();
-		idBook=Integer.parseInt(param[1]);
+		idBook=params.get(ID_BOOK);
+		
 		ServiceFactory serviceFactory=ServiceFactory.getInstance();
 		LibraryService libraryService=serviceFactory.getLibraryService();
 		try {
-			libraryService.orderBook(idUser,idBook);
-			response="The book was ordered";
+			libraryService.orderBook(idUser,Integer.parseInt(idBook));
+			response="The book is ordered";
 		} catch (ServiceException e) {
 			response="Error during ordering";
+		}catch (NumberFormatException e) {
+			response = "Invalid parameters";
 		}
 		return response;
 	}

@@ -5,9 +5,6 @@ public class Book {
 	private String title;
 	private String author;
 	private String status;
-	//private Category category;
-	/*private int year;
-	private int pages;*/
 	
 	public Book(){
 		
@@ -30,18 +27,6 @@ public class Book {
 		return author;
 	}
 
-	/*public Category getCategory() {
-		return category;
-	}*/
-
-	/*public int getYear() {
-		return year;
-	}
-
-	public int getPages() {
-		return pages;
-	}*/
-
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -61,18 +46,52 @@ public class Book {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
 
-	/*public void setCategory(Category category) {
-		this.category = category;
-	}*/
-
-	/*public void setYear(int year) {
-		this.year = year;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
 	}
 
-	public void setPages(int pages) {
-		this.pages = pages;
-	}*/
-			
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Book other = (Book) obj;
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
+		if (id != other.id)
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", status=" + status + "]";
+	}
+	
+	
+	
 }

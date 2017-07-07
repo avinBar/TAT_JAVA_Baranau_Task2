@@ -9,6 +9,7 @@ public interface LibraryService {
 	void addBook(Book book) throws ServiceException;
 	void addEditedBook(Book book);
 	List<Book> showAllBooks() throws ServiceException;
-	void deleteBook(int idBook) throws ServiceException;
 	void orderBook(int idUser, int idBook) throws ServiceException;
+	void deleteBook(int idBook) throws ServiceException;
+	void cancelOrder(int idUser, int parseInt)throws ServiceException;
 }

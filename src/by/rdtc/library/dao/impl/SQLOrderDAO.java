@@ -10,13 +10,11 @@ import by.rdtc.library.dao.iface.OrderDAO;
 import by.rdtc.library.dao.pool.SQLDBWorker;
 
 public class SQLOrderDAO implements OrderDAO {
-	private final static String NEW_ORDER = "INSERT INTO orders (`u_id`, `b_id`, `order_date`, `status`) VALUES(?,?,?,'ordered')";
-	private final static String DELIVERY_ORDER = "UPDATE orders SET delivery_date=? status='on_hands' WHERE id_order=?";
-	// private final static String BOOK_STATUS="UPDATE orders SET
-	// status='on_hands' WHERE id_order=?";
-	private final static String CONFIRM_RETURN = "UPDATE orders SET return_date=? ,status='returned' WHERE id_order=?";
-
-	// private final static String DATE_FORMAT="yyyy:dd:mm HH:mm";
+	private final static String NEW_ORDER = "INSERT INTO orders (`u_id`, `b_id`, `order_date`) VALUES(?,?,?)";
+	private final static String DELIVERY_ORDER = "UPDATE orders SET delivery_date=?  WHERE id_order=?";
+	private final static String CONFIRM_RETURN = "UPDATE orders SET return_date=?  WHERE id_order=?";
+	private final static String CANCEL_ORDER = "DELETE FROM orders where order_id = ? and u_id = ? and delivery_date = NULL";
+	
 	@Override
 	public void addOrder(int idUser, int idBook) throws DAOException {
 		Connection connection = null;
@@ -33,7 +31,6 @@ public class SQLOrderDAO implements OrderDAO {
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		}
-
 	}
 
 	@Override
@@ -62,6 +59,23 @@ public class SQLOrderDAO implements OrderDAO {
 			state.setDate(1, new Date(System.currentTimeMillis()));
 			state.setInt(2, idOrder);
 			state.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
+	}
+
+	@Override
+	public void cancelOrder(int idUser, int idOrder) throws DAOException {
+		Connection connection = null;
+		PreparedStatement state = null;
+
+		try {
+			connection = SQLDBWorker.getInstance().getConnection();
+			state = connection.prepareStatement(CANCEL_ORDER);
+			state.setInt(1, idOrder);
+			state.setInt(2, idUser);
+			state.executeUpdate();
+
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		}

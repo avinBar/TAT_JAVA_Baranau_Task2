@@ -14,9 +14,6 @@ public class LibraryServiceImpl implements LibraryService {
 
 	@Override
 	public void addBook(Book book) throws ServiceException {
-		if (book == null) {
-			throw new ServiceException("Null book");
-		}
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		BookDAO bookDAO = daoObjectFactory.getBookDAO();
 		try {
@@ -61,6 +58,17 @@ public class LibraryServiceImpl implements LibraryService {
 		BookDAO bookDAO = daoObjectFactory.getBookDAO();
 		try {
 			bookDAO.deleteBook(idBook);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public void cancelOrder(int idUser,int idOrder) throws ServiceException {
+		DAOFactory daoObjectFactory = DAOFactory.getInstance();
+		OrderDAO bookDAO = daoObjectFactory.getOrderDAO();
+		try {
+			bookDAO.cancelOrder(idUser,idOrder);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

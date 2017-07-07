@@ -18,9 +18,10 @@ public class AdminServiceImpl implements AdminService {
 		UserDAO userDAO = daoFactory.getUserDAO();
 		try {
 			User user = userDAO.getUserByLogin(login);
-			if (user.getType().equals(USER)) {
-				userDAO.banUser(login);
+			if (!user.getType().equals(USER)) {
+				throw new ServiceException();
 			}
+			userDAO.banUser(login);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -33,9 +34,10 @@ public class AdminServiceImpl implements AdminService {
 		UserDAO userDAO = daoFactory.getUserDAO();
 		try {
 			User user = userDAO.getUserByLogin(login);
-			if (user.getType().equals(BANNED)) {
-				userDAO.unbanUser(login);
+			if (!user.getType().equals(BANNED)) {
+				throw new ServiceException();
 			}
+			userDAO.unbanUser(login);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -49,19 +51,20 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			User user = userDAO.getUserByLogin(login);
 			if (user.getType().equals(USER)) {
-				userDAO.giveAdminRole(login);
+				throw new ServiceException();
 			}
+			userDAO.giveAdminRole(login);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	@Override
-	public void confirmReturn(String orderId) throws ServiceException {
+	public void confirmReturn(int idOrder) throws ServiceException {
 		DAOFactory daoFactory = DAOFactory.getInstance();
 		OrderDAO orderDAO = daoFactory.getOrderDAO();
 		try {
-			orderDAO.confirmReturn(orderId);
+			orderDAO.confirmReturn(idOrder);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -69,13 +72,14 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public void deliveryOrder(String orderId) throws ServiceException {
+	public void deliveryOrder(int idOrder) throws ServiceException {
 		DAOFactory daoFactory = DAOFactory.getInstance();
 		OrderDAO orderDAO = daoFactory.getOrderDAO();
 		try {
-			orderDAO.deliveryOrder(orderId);
+			orderDAO.deliveryOrder(idOrder);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
+
 }

@@ -1,7 +1,10 @@
 package by.rdtc.library.controller;
 
+import java.util.Map;
+
 import by.rdtc.library.bean.User;
 import by.rdtc.library.controller.command.Command;
+import by.rdtc.library.controller.util.RequestParser;
 
 public final class Controller {
 	private static final String GUEST = "guest";
@@ -23,7 +26,6 @@ public final class Controller {
 		String commandName;
 		Command executionCommand;
 		String type;
-		String[] param;
 		
 		commandName = request.substring(0, request.indexOf(paramDelimeter));
 		if (user == null) {
@@ -31,12 +33,12 @@ public final class Controller {
 		} else {
 			type = getUser().getType();
 		}
+		Map<String, String> paramsMap = RequestParser.getParameters(request);
 		executionCommand = provider.getCommand(type, commandName);
 		if(executionCommand==null){
-			response="В операции отказано";
+			response="Not allowed to execute procedure";
 		}else{
-		param=commandName.split(paramDelimeter);
-		response = executionCommand.execute(param);}
+		response = executionCommand.execute(paramsMap);}
 		return response;
 	}
 }
