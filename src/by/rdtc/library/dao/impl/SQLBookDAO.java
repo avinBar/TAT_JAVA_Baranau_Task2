@@ -72,6 +72,5 @@ public class SQLBookDAO implements BookDAO {
 		}catch(SQLException e){
 			throw new DAOException(e);
 		}
-		
 	}
 }

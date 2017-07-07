@@ -1,5 +1,7 @@
 package by.rdtc.library.dao.iface;
 
+import java.util.List;
+
 import by.rdtc.library.bean.User;
 import by.rdtc.library.dao.exception.DAOException;
 
@@ -11,5 +13,6 @@ public interface UserDAO {
 	void giveAdminRole(String login) throws DAOException;
 	void register(User user) throws DAOException;
 	void removeAdmin(String login)throws DAOException;
+	List<User>getAllUser() throws DAOException;
 	 
 }

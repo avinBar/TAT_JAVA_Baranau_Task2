@@ -1,5 +1,7 @@
 package by.rdtc.library.service.impl;
 
+import java.util.List;
+
 import by.rdtc.library.bean.User;
 import by.rdtc.library.dao.DAOFactory;
 import by.rdtc.library.dao.exception.DAOException;
@@ -80,6 +82,19 @@ public class AdminServiceImpl implements AdminService {
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
+	}
+
+	@Override
+	public List<User> getAllUsers() throws ServiceException {
+		DAOFactory daoObjectFactory = DAOFactory.getInstance();
+		UserDAO userDAO = daoObjectFactory.getUserDAO();
+		List<User> users;
+		try {
+			users = userDAO.getAllUser();
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+		return users;
 	}
 
 }

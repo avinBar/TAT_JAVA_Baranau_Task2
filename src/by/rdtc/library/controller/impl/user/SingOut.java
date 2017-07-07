@@ -2,6 +2,7 @@ package by.rdtc.library.controller.impl.user;
 
 import java.util.Map;
 
+import by.rdtc.library.controller.Controller;
 import by.rdtc.library.controller.command.Command;
 import by.rdtc.library.service.ServiceFactory;
 import by.rdtc.library.service.iface.UserService;
@@ -14,9 +15,8 @@ public class SingOut implements Command {
 		
 		ServiceFactory serviceFactory=ServiceFactory.getInstance();
 		UserService userService=serviceFactory.getUserService();
-		userService.signOut();
+		Controller.setUser(userService.signOut());
 		response="Bye";
 		return response;
 	}
-
 }

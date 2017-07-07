@@ -19,6 +19,7 @@ import by.rdtc.library.controller.impl.super_admin.AdminToUser;
 import by.rdtc.library.controller.impl.user.CancelOrder;
 import by.rdtc.library.controller.impl.user.EditProfile;
 import by.rdtc.library.controller.impl.user.OrderBook;
+import by.rdtc.library.controller.impl.user.ShowProfile;
 import by.rdtc.library.controller.impl.user.SingOut;
 
 final class CommandProvider {
@@ -39,6 +40,7 @@ final class CommandProvider {
 
 		userCommands.putAll(guestCommands);
 		userCommands.put(CommandName.SIGN_OUT, new SingOut());
+		userCommands.put(CommandName.SHOW_PROFILE, new ShowProfile());
 		userCommands.put(CommandName.EDIT_PROFILE, new EditProfile());
 		userCommands.put(CommandName.ORDER_BOOK, new OrderBook());
 		userCommands.put(CommandName.CANCEL_ORDER, new CancelOrder());

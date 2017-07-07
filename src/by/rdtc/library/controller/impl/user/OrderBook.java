@@ -39,5 +39,4 @@ public class OrderBook implements Command {
 		}
 		return response;
 	}
-
 }
