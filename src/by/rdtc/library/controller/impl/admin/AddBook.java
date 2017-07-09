@@ -2,16 +2,20 @@ package by.rdtc.library.controller.impl.admin;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import by.rdtc.library.bean.Book;
 import by.rdtc.library.controller.command.Command;
 import by.rdtc.library.service.ServiceFactory;
 import by.rdtc.library.service.exception.ServiceException;
-import by.rdtc.library.service.iface.LibraryService;
+import by.rdtc.library.service.iface.BookService;
 
 public class AddBook implements Command{
 	private static final String TITLE = "title";
 	private static final String AUTHOR = "author";
 	private static final int PARAMS_NUMBER = 2;
+	
+	private static final Logger log = Logger.getLogger(AddBook.class);
 	
 	@Override
 	public String execute(Map<String,String> params) {
@@ -24,20 +28,20 @@ public class AddBook implements Command{
 			response="Wrong number of parameters";
 			return response;
 		}
-		title=params.get(TITLE);
-		author=params.get(AUTHOR);
 		
 		ServiceFactory serviceFactory=ServiceFactory.getInstance();
-		LibraryService libraryService=serviceFactory.getLibraryService();
-		Book book=new Book(title,author);
+		BookService bookService=serviceFactory.getBookService();
+		Book book;
 		try {
-			libraryService.addBook(book);
+			title=params.get(TITLE);
+			author=params.get(AUTHOR);
+			book=new Book(title,author);
+			bookService.addBook(book);
 			response="Book is added";
 		} catch (ServiceException e) {
+			log.error(e);
 			response="Error during add book procedure";
 		}
-		
 		return response;
 	}
-	
 }

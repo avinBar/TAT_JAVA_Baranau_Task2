@@ -1,4 +1,4 @@
-package by.rdtc.library.view;
+package by.rdtc.library.runner;
 
 import java.util.Scanner;
 

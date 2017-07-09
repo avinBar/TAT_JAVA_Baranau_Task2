@@ -10,8 +10,11 @@ import by.rdtc.library.controller.impl.admin.BanUser;
 import by.rdtc.library.controller.impl.admin.ConfirmReturn;
 import by.rdtc.library.controller.impl.admin.DeleteBook;
 import by.rdtc.library.controller.impl.admin.DeliveryOrder;
+import by.rdtc.library.controller.impl.admin.EditBook;
 import by.rdtc.library.controller.impl.admin.UnbanUser;
 import by.rdtc.library.controller.impl.admin.UserToAdmin;
+import by.rdtc.library.controller.impl.admin.ViewAllUser;
+import by.rdtc.library.controller.impl.admin.ViewUsersOrders;
 import by.rdtc.library.controller.impl.guest.Registration;
 import by.rdtc.library.controller.impl.guest.ShowBooks;
 import by.rdtc.library.controller.impl.guest.SignIn;
@@ -21,6 +24,8 @@ import by.rdtc.library.controller.impl.user.EditProfile;
 import by.rdtc.library.controller.impl.user.OrderBook;
 import by.rdtc.library.controller.impl.user.ShowProfile;
 import by.rdtc.library.controller.impl.user.SingOut;
+import by.rdtc.library.controller.impl.user.ViewBook;
+import by.rdtc.library.controller.impl.user.ViewOrders;
 
 final class CommandProvider {
 	private static final String USER = "user";
@@ -42,15 +47,20 @@ final class CommandProvider {
 		userCommands.put(CommandName.SIGN_OUT, new SingOut());
 		userCommands.put(CommandName.SHOW_PROFILE, new ShowProfile());
 		userCommands.put(CommandName.EDIT_PROFILE, new EditProfile());
+		userCommands.put(CommandName.VIEW_BOOK, new ViewBook());
 		userCommands.put(CommandName.ORDER_BOOK, new OrderBook());
 		userCommands.put(CommandName.CANCEL_ORDER, new CancelOrder());
+		userCommands.put(CommandName.VIEW_ORDERS, new ViewOrders());
 
 		adminCommands.putAll(userCommands);
 		adminCommands.put(CommandName.ADD_BOOK, new AddBook());
+		adminCommands.put(CommandName.EDIT_BOOK, new EditBook());
 		adminCommands.put(CommandName.DELETE_BOOK, new DeleteBook());
 		adminCommands.put(CommandName.BAN_USER, new BanUser());
 		adminCommands.put(CommandName.UNBAN_USER, new UnbanUser());
+		adminCommands.put(CommandName.VIEW_ALL_USERS, new ViewAllUser());
 		adminCommands.put(CommandName.GIVE_ADMIN_ROLE, new UserToAdmin());
+		adminCommands.put(CommandName.VIEW_USERS_ORDERS, new ViewUsersOrders());
 		adminCommands.put(CommandName.DELIVERY_ORDER, new DeliveryOrder());
 		adminCommands.put(CommandName.RETURN_BOOK, new ConfirmReturn());
 

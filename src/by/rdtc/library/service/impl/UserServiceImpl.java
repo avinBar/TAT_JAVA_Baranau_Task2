@@ -13,9 +13,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User signIn(String login, String password) throws ServiceException {
-		if (!Validator.validateLogin(login) || !Validator.validatePassword(password)) {
-			throw new ServiceException("Invalid credentials");
+		if (!Validator.validate(login, password)) {
+			throw new ServiceException("Received null parameter");
 		}
+
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		UserDAO userDAO = daoObjectFactory.getUserDAO();
 		User user;
@@ -28,48 +29,70 @@ public class UserServiceImpl implements UserService {
 			}
 			return user;
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new ServiceException(e.getMessage(),e);
 		}
-
 	}
 
 	@Override
 	public User signOut() {
-		User user = null;
-		return user;
+		return null;
 	}
 
 	@Override
 	public void register(String login, String password, String name, String surname) throws ServiceException {
-		if (!Validator.validateLogin(login) ||
-                !Validator.validateName(name) ||
-                !Validator.validateName(surname)||
-                !Validator.validatePassword(password)) {
-            throw new ServiceException("Invalid parameters");
-        }
+		if (!Validator.validate(login, password, name, surname)) {
+			throw new ServiceException("Received null parameter");
+		}
+		else if (!Validator.validateLogin(login) || !Validator.validateName(name) || !Validator.validateName(surname)
+				|| !Validator.validatePassword(password)) {
+			throw new ServiceException("Invalid parameters");
+		}
+
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		UserDAO userDAO = daoObjectFactory.getUserDAO();
-		User user=new User(login,password,name,surname);
+		User user = new User(login, password, name, surname);
 		try {
 			userDAO.register(user);
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new ServiceException(e.getMessage(),e);
 		}
 	}
 
 	@Override
-	public User editProfile(String name, String surname) throws ServiceException {
-		if (!Validator.validateName(name) ||
-                !Validator.validateName(surname)){
-            throw new ServiceException("Invalid parameters");
-        }
+	public void editProfile(User user) throws ServiceException {
+		if (null==user||!Validator.validate(user.getName(), user.getSurname())) {
+			throw new ServiceException("Received null parameter");
+		}
+		else if (!Validator.validateName(user.getName()) || !Validator.validateName(user.getSurname())) {
+			throw new ServiceException("Invalid parameters");
+		}
+		
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		UserDAO userDAO = daoObjectFactory.getUserDAO();
-		User user=new User();
 		try {
-			userDAO.register(user);
+			userDAO.editProfile(user);
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new ServiceException(e.getMessage(),e);
+		}
+	}
+
+	@Override
+	public User getUserByID(int idUser) throws ServiceException {
+		if (!Validator.validate(idUser)) {
+			throw new ServiceException("Received null parameter");
+		}
+		
+		DAOFactory daoObjectFactory = DAOFactory.getInstance();
+		UserDAO userDAO = daoObjectFactory.getUserDAO();
+		User user;
+		try {
+			user=userDAO.getUserById(idUser);
+			if(null==user){
+				throw new ServiceException("No user matching your query");
+			}
+		} catch (DAOException e) {
+			throw new ServiceException(e.getMessage(),e);
 		}
 		return user;
-}}
+	}
+}

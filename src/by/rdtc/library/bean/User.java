@@ -1,21 +1,28 @@
 package by.rdtc.library.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
+	
+	private static final long serialVersionUID = -1692649218956565153L;
+	
 	private int id;
 	private String login;
 	private String password;
 	private String name;
 	private String surname;
 	private String type;
-	private List<Order> orders = new ArrayList<>();
 	
 	public User() {
 		
 	}
 
+	public User(int id,String name, String surname) {
+		this.id=id;
+		this.name = name;
+		this.surname = surname;
+	}
+	
 	public User(String login, String password, String name, String surname) {
 		this.login = login;
 		this.password = password;
@@ -68,14 +75,6 @@ public class User {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
 	}
 
 	@Override
@@ -135,7 +134,5 @@ public class User {
 		return "User [id=" + id + ", login=" + login + ", password=" + password + ", name=" + name + ", surname="
 				+ surname + ", type=" + type + "]";
 	}
-	
-	
 	
 }

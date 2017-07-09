@@ -7,22 +7,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.rdtc.library.bean.Book;
 import by.rdtc.library.bean.User;
+import by.rdtc.library.dao.connection.SQLDBWorker;
 import by.rdtc.library.dao.exception.DAOException;
 import by.rdtc.library.dao.iface.UserDAO;
-import by.rdtc.library.dao.pool.SQLDBWorker;
 
 public class SQLUserDAO implements UserDAO {
-	private final static String SIGN_IN="SELECT * FROM user WHERE u_login=? and u_password=?";
-	private final static String UPDATE_PROFILE="SELECT * FROM user WHERE u_login=? and u_password=?";
-	private final static String USER_BY_LOGIN="SELECT * FROM user WHERE u_login=?";
-	private final static String REGISTRATION="INSERT INTO user (`u_login`, `u_password`, `u_name`, `u_type`) VALUES(?,?,?,'user')";
-	private final static String VIEW_ALL_USERS ="SELECT * FROM user";
-	private final static String BAN_USER="UPDATE user SET u_type='banned' WHERE u_login=?";
-	private final static String UNBAN_USER="UPDATE user SET u_type='user' WHERE u_login=?";
-	private final static String GIVE_ADMIN_ROLE="UPDATE user SET u_type='admin' WHERE u_login=?";
-	private final static String REMOVE_ADMIN="UPDATE user SET u_type='user' WHERE u_login=?";
+	private final static String SIGN_IN="SELECT u_id,u_login, u_type FROM user WHERE u_login=? and u_password=?";
+	private final static String UPDATE_PROFILE="UPDATE user SET u_name=?, u_surname=? WHERE u_id=?";
+	private final static String USER_BY_LOGIN="SELECT u_id,u_login, u_name, u_surname, u_type FROM user WHERE u_login=?";
+	private final static String USER_BY_ID="SELECT u_id,u_login, u_name, u_surname, u_type FROM user WHERE u_id=?";
+	private final static String REGISTRATION="INSERT INTO user (`u_login`, `u_password`, `u_name`, `u_surname`, `u_type`) VALUES(?,?,?,?,'user')";
+	private final static String VIEW_ALL_USERS ="SELECT u_id,u_login, u_name, u_surname, u_type FROM user";
+	private final static String CHANGE_USER_TYPE="UPDATE user SET u_type=? WHERE u_login=? AND u_type=?";
+	
+	
+	private final static int ZERO_AFFECTED_ROWS = 0;
+	
+	private final static String USER="user";
+	private final static String ADMIN="admin";
+	private final static String BANNED="banned";
+	private static final String U_ID = "u_id";
+	private static final String U_LOGIN = "u_login";
+	private static final String U_NAME = "u_name";
+	private static final String U_SURNAME = "u_surname";
+	private static final String U_TYPE = "u_type";
 	
 	@Override
 	public User signIn(String login, String password) throws DAOException {
@@ -38,16 +47,15 @@ public class SQLUserDAO implements UserDAO {
 			rs=state.executeQuery();
 
             if (!rs.next()) {
-                throw new DAOException("Not");
+                return null;
             }
             User user=new User();
-            user.setId(rs.getInt("u_id"));
-            user.setLogin(rs.getString("u_login"));
-            user.setName(rs.getString("u_name"));
-            user.setType(rs.getString("u_type"));
+            user.setId(rs.getInt(U_ID));
+            user.setLogin(rs.getString(U_LOGIN));
+            user.setType(rs.getString(U_TYPE));
 			return user;
 		  } catch (SQLException e) {
-	            throw new DAOException("Login sql error", e);
+	            throw new DAOException("Sign_in sql error", e);
 	        }
 	    }
 
@@ -56,28 +64,60 @@ public class SQLUserDAO implements UserDAO {
 		Connection connect=null;
 		PreparedStatement state=null;
 		try{
+				System.out.println(user.getLogin()+user.getName()+user.getPassword()+user.getSurname());
 				connect=SQLDBWorker.getInstance().getConnection();
 				state=connect.prepareStatement(REGISTRATION);
 				state.setString(1, user.getLogin());
 				state.setString(2, user.getPassword());
 				state.setString(3, user.getName());
-				state.executeUpdate();
-				
+				state.setString(4, user.getSurname());
+				int update=state.executeUpdate();
+				if(update>ZERO_AFFECTED_ROWS){
+					return;
+				}
+				throw new DAOException("Wrong user data");
 		  } catch (SQLException e) {
-	            throw new DAOException("Login sql error", e);
+	            throw new DAOException("Register sql error", e);
 	        }
 	    }
-		
 	
+	@Override
+	public void editProfile(User user) throws DAOException {
+		Connection connect=null;
+		PreparedStatement state=null;
+		
+		try{
+				connect=SQLDBWorker.getInstance().getConnection();
+				state=connect.prepareStatement(UPDATE_PROFILE);
+				state.setString(1, user.getName());
+				state.setString(2, user.getSurname());
+				state.setInt(3, user.getId());
+				int update=state.executeUpdate();
+				if(update>ZERO_AFFECTED_ROWS){
+					return;
+				}
+				throw new DAOException("Wrong user data");
+		  } catch (SQLException e) {
+	            throw new DAOException("Register sql error", e);
+	        }
+	    }
+	
+		
 	@Override
 	public void banUser(String login) throws DAOException {
 			Connection connect=null;
 			PreparedStatement state=null;
 			try{
 				connect=SQLDBWorker.getInstance().getConnection();
-				state=connect.prepareStatement(BAN_USER);
-				state.setString(1, login);
-				state.executeUpdate();
+				state=connect.prepareStatement(CHANGE_USER_TYPE);
+				state.setString(1, BANNED);
+				state.setString(2, login);
+				state.setString(3, USER);
+				int update=state.executeUpdate();
+				if(update>ZERO_AFFECTED_ROWS){
+					return;
+				}
+				throw new DAOException("Wrong user data");
 			}catch(SQLException e){
 				throw new DAOException("Ban sql error",e);
 			}
@@ -89,9 +129,15 @@ public class SQLUserDAO implements UserDAO {
 		PreparedStatement state=null;
 		try{
 			connect=SQLDBWorker.getInstance().getConnection();
-		    state=connect.prepareStatement(UNBAN_USER);
-			state.setString(1, login);
-			state.executeUpdate();
+		    state=connect.prepareStatement(CHANGE_USER_TYPE);
+		    state.setString(1, USER);
+			state.setString(2, login);
+			state.setString(3, BANNED);
+			int update=state.executeUpdate();
+			if(update>ZERO_AFFECTED_ROWS){
+				return;
+			}
+			throw new DAOException("Wrong user data");
 		}catch(SQLException e){
 			throw new DAOException("Unban sql error",e);
 		}
@@ -104,9 +150,15 @@ public class SQLUserDAO implements UserDAO {
 		PreparedStatement state=null;
 		try{
 			connect=SQLDBWorker.getInstance().getConnection();
-		    state=connect.prepareStatement(GIVE_ADMIN_ROLE);
-			state.setString(1, login);
-			state.executeUpdate();
+		    state=connect.prepareStatement(CHANGE_USER_TYPE);
+		    state.setString(1, ADMIN);
+			state.setString(2, login);
+			state.setString(3, USER);
+			int update=state.executeUpdate();
+			if(update>ZERO_AFFECTED_ROWS){
+				return;
+			}
+			throw new DAOException("Wrong user data");
 		}catch(SQLException e){
 			throw new DAOException("Give Admin sql error",e);
 		}
@@ -118,11 +170,17 @@ public class SQLUserDAO implements UserDAO {
 		PreparedStatement state=null;
 		try{
 			connect=SQLDBWorker.getInstance().getConnection();
-		    state=connect.prepareStatement(REMOVE_ADMIN);
-			state.setString(1, login);
-			state.executeUpdate();
+		    state=connect.prepareStatement(CHANGE_USER_TYPE);
+		    state.setString(1, USER);
+			state.setString(2, login);
+			state.setString(3, ADMIN);
+			int update=state.executeUpdate();
+			if(update>ZERO_AFFECTED_ROWS){
+				return;
+			}
+			throw new DAOException("Wrong user data");
 		}catch(SQLException e){
-			throw new DAOException("Take Admin sql error",e);
+			throw new DAOException("Remove Admin sql error",e);
 		}
 	}
 
@@ -131,28 +189,32 @@ public class SQLUserDAO implements UserDAO {
 		Connection connect=null;
 		PreparedStatement state=null;
 		ResultSet rs=null;
+		User user=null;
 		try{
 			 connect=SQLDBWorker.getInstance().getConnection();
 			 state=connect.prepareStatement(USER_BY_LOGIN);
 			 state.setString(1, login);
 			 rs=state.executeQuery();
 			 
-			 User user=null;
 			 if(rs.next()){
 				 user=new User();
-				 user.setLogin(rs.getString("u_login"));
-				 user.setName(rs.getString("u_name"));
-				 user.setType(rs.getString("u_type"));
+				 user.setId(rs.getInt(U_ID));
+				 user.setLogin(rs.getString(U_LOGIN));
+				 user.setName(rs.getString(U_NAME));
+				 user.setSurname(rs.getString(U_SURNAME));
+				 user.setType(rs.getString(U_TYPE));
+			 }else{
+				 throw new DAOException("User doesn't exist");
 			 }
-			 return user;
 			 
 		}catch(SQLException e){
-			throw new DAOException("User sql error");
+			throw new DAOException("Get user sql error",e);
 		}
+		return user;
 	}
 
 	@Override
-	public List<User> getAllUser() throws DAOException {
+	public List<User> getAllUsers() throws DAOException {
 		Connection connect=null;
 		PreparedStatement state=null;
 		ResultSet rs = null;
@@ -160,20 +222,52 @@ public class SQLUserDAO implements UserDAO {
 			connect=SQLDBWorker.getInstance().getConnection();
 			state=connect.prepareStatement(VIEW_ALL_USERS);
 			rs=state.executeQuery();
+			if(!rs.next()){
+				return null;
+			}
 			List<User> users=new ArrayList<>();
 			User user;
 			while(rs.next()){
 				user=new User();
-				user.setId(rs.getInt("u_id"));
-				user.setLogin(rs.getString("u_login"));
-				user.setName(rs.getString("u_name"));
-				user.setSurname(rs.getString("type"));
+				user.setId(rs.getInt(U_ID));
+				user.setLogin(rs.getString(U_LOGIN));
+				user.setName(rs.getString(U_NAME));
+				user.setSurname(rs.getString(U_SURNAME));
+				user.setType(rs.getString(U_TYPE));
 				users.add(user);
 			}
 			return users;
 		}catch(SQLException e){
-			throw new DAOException(e);
+			throw new DAOException("Get list of users sql error",e);
 		}
 	}
 
+	@Override
+	public User getUserById(int idUser) throws DAOException {
+		Connection connect=null;
+		PreparedStatement state=null;
+		ResultSet rs=null;
+		User user=null;
+		try{
+			 connect=SQLDBWorker.getInstance().getConnection();
+			 state=connect.prepareStatement(USER_BY_ID);
+			 state.setInt(1, idUser);
+			 rs=state.executeQuery();
+			 
+			 if(rs.next()){
+				 user=new User();
+				 user.setId(rs.getInt(U_ID));
+				 user.setLogin(rs.getString(U_LOGIN));
+				 user.setName(rs.getString(U_NAME));
+				 user.setSurname(rs.getString(U_SURNAME));
+				 user.setType(rs.getString(U_TYPE));
+			 }else{
+				 throw new DAOException("User doesn't exist");
+			 }
+			 
+		}catch(SQLException e){
+			throw new DAOException("Get user sql error",e);
+		}
+		return user;
+	}
 }

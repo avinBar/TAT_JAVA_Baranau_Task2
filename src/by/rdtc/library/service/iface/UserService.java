@@ -7,5 +7,7 @@ public interface UserService {
 	User signIn(String login,String password) throws ServiceException ;
 	User signOut();
 	void register(String login, String password, String name, String surname) throws ServiceException;
-	User editProfile(String name, String surname) throws ServiceException;
+	void editProfile(User user)throws ServiceException;
+	User getUserByID(int idUser) throws ServiceException;
+	
 }

@@ -26,7 +26,10 @@ public final class Controller {
 		String commandName;
 		Command executionCommand;
 		String type;
-		
+		if(!request.contains(paramDelimeter)){
+			response="Invalid request";
+			return response;
+		}
 		commandName = request.substring(0, request.indexOf(paramDelimeter));
 		if (user == null) {
 			type=GUEST;

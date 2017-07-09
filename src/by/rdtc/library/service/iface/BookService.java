@@ -5,11 +5,10 @@ import java.util.List;
 import by.rdtc.library.bean.Book;
 import by.rdtc.library.service.exception.ServiceException;
 
-public interface LibraryService {
+public interface BookService {
 	void addBook(Book book) throws ServiceException;
-	void addEditedBook(Book book);
 	List<Book> showAllBooks() throws ServiceException;
-	void orderBook(int idUser, int idBook) throws ServiceException;
 	void deleteBook(int idBook) throws ServiceException;
-	void cancelOrder(int idUser, int parseInt)throws ServiceException;
+	void editBook(Book book) throws ServiceException;
+	Book getBookByID(int idBook) throws ServiceException;
 }

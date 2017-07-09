@@ -1,6 +1,14 @@
 package by.rdtc.library.bean;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8445516672354957091L;
+	
 	private int id;
 	private String title;
 	private String author;
@@ -14,7 +22,12 @@ public class Book {
 		this.title=title;
 		this.author=author;
 	}
-
+	
+	public Book(int id,String title,String author){
+		this(title,author);
+		this.id=id;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -91,7 +104,5 @@ public class Book {
 	public String toString() {
 		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", status=" + status + "]";
 	}
-	
-	
 	
 }
