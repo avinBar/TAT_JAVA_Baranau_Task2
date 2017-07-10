@@ -74,8 +74,10 @@ public class OrderServiceImpl implements OrderService {
 
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		OrderDAO orderDAO = daoObjectFactory.getOrderDAO();
+		Order order;
 		try {
-			orderDAO.cancelOrder(idUser, idOrder);
+			order=orderDAO.getOrderById(idOrder);
+			orderDAO.cancelOrder(idUser, idOrder,order.getIdBook());
 		} catch (DAOException e) {
 			throw new ServiceException(e.getMessage(), e);
 		}

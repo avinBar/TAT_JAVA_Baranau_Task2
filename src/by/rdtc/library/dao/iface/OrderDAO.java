@@ -11,5 +11,6 @@ public interface OrderDAO {
 	void addOrder(int idUser, int idBook) throws DAOException;
 	void confirmReturn(int idOrder) throws DAOException;
 	void deliveryOrder(int idOrder) throws DAOException;
-	void cancelOrder(int idUser, int idOrder)throws DAOException;
+	void cancelOrder(int idUser, int idOrder, int idBook)throws DAOException;
+	Order getOrderById(int idOrder) throws DAOException;
 }
