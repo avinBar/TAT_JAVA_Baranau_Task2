@@ -54,16 +54,16 @@ public class SQLBookDAO implements BookDAO {
 			state = connect.prepareStatement(SELECT_BOOK);
 			state.setInt(1, idBook);
 			rs = state.executeQuery();
-			Book book=null;
-			while (rs.next()) {
-				book = new Book();
-				book.setId(rs.getInt("b_id"));
-				book.setTitle(rs.getString("b_title"));
-				book.setAuthor(rs.getString("b_author"));
-				book.setStatus(rs.getString("b_status"));
+			if (!rs.next()) {
+				throw new DAOException("No book matching query");
 			}
+			Book book = new Book();
+			book.setId(rs.getInt("b_id"));
+			book.setTitle(rs.getString("b_title"));
+			book.setAuthor(rs.getString("b_author"));
+			book.setStatus(rs.getString("b_status"));
 			return book;
-			
+
 		} catch (SQLException e) {
 			throw new DAOException("Get book sql error", e);
 		}
