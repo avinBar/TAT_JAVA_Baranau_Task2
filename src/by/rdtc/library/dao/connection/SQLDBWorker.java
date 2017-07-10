@@ -9,7 +9,7 @@ import by.rdtc.library.dao.exception.DAOException;
 public class SQLDBWorker implements DBWorker {
 	private static final String URL = "jdbc:mysql://localhost:3306/elibrary";
 	private static final String USER = "root";
-	private static final String PASSWORD = "root";
+	private static final String PASSWORD = "root777";
 
 	private static SQLDBWorker instace = null;
 

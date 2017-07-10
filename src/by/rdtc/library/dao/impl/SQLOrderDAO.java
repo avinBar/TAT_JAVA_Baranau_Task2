@@ -48,7 +48,7 @@ public class SQLOrderDAO implements OrderDAO {
 				state.executeUpdate();
 				return;
 			}
-			throw new DAOException();
+			throw new DAOException("Wrong order data");
 		} catch (SQLException e) {
 			throw new DAOException("Add order sql error", e);
 		}
@@ -72,7 +72,7 @@ public class SQLOrderDAO implements OrderDAO {
 				state.executeUpdate();
 				return;
 			}
-			throw new DAOException();
+			throw new DAOException("Wrong order data");
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		}
@@ -96,7 +96,7 @@ public class SQLOrderDAO implements OrderDAO {
 				state.executeUpdate();
 				return;
 			}
-			throw new DAOException();
+			throw new DAOException("Wrong order data");
 		} catch (SQLException e) {
 			throw new DAOException("Delivery order sql error", e);
 		}
@@ -112,7 +112,6 @@ public class SQLOrderDAO implements OrderDAO {
 			state = connection.prepareStatement(CANCEL_ORDER);
 			state.setInt(1, idOrder);
 			state.setInt(2, idUser);
-			state.executeUpdate();
 			int update = state.executeUpdate();
 			if (update > ZERO_AFFECTED_ROWS) {
 				state = connection.prepareStatement(NEW_BOOK_STATUS);
@@ -121,7 +120,7 @@ public class SQLOrderDAO implements OrderDAO {
 				state.executeUpdate();
 				return;
 			}
-			throw new DAOException();
+			throw new DAOException("Wrong order data");
 		} catch (SQLException e) {
 			throw new DAOException("Cancel order sql error", e);
 		}
@@ -190,9 +189,12 @@ public class SQLOrderDAO implements OrderDAO {
 		try{
 			connect=SQLDBWorker.getInstance().getConnection();
 			state=connect.prepareStatement(GET_ORDER_BY_ID);
+			state.setInt(1, idOrder);
 			rs=state.executeQuery();
 			Order order;
-			if(rs.next()){
+			if(!rs.next()){
+				throw new DAOException("No order matching query");
+			}
 				order=new Order();
 				order.setId(rs.getInt("o_id"));
 				order.setIdUser(rs.getInt("u_id"));
@@ -200,8 +202,6 @@ public class SQLOrderDAO implements OrderDAO {
 				order.setDeliveryDate(rs.getDate("delivery_date"));
 				order.setReturnDate(rs.getDate("return_date"));
 				return order;
-			}
-			throw new DAOException("No order matching query");
 		}catch(SQLException e){
 			throw new DAOException("Get order sql error");
 		}
