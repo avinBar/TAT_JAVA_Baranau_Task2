@@ -17,7 +17,7 @@ public class SQLBookDAO implements BookDAO {
 	private static final String UPDATE_BOOK = "UPDATE book SET b_title=?, b_author=? WHERE b_id=?";
 	private static final String SELECT_BOOK = "SELECT b_id, b_title, b_author, b_status FROM book WHERE b_id=?";
 	private static final String SHOW_ALL_BOOKS = "SELECT b_id, b_title, b_author, b_status FROM book";
-	private static final String CHANGE_BOOK_STATUS = "UPDATE book SET b_status=? WHERE b_id=?";
+	private static final String DELETE_BOOK = "UPDATE book SET b_status=? WHERE b_id=? and b_status=on_shelf";
 
 	private static final String ON_SHELF = "on_shelf";
 	private static final String DELETED = "deleted";
@@ -95,7 +95,7 @@ public class SQLBookDAO implements BookDAO {
 		PreparedStatement state = null;
 		try {
 			connect = SQLDBWorker.getInstance().getConnection();
-			state = connect.prepareStatement(CHANGE_BOOK_STATUS);
+			state = connect.prepareStatement(DELETE_BOOK);
 			state.setString(1, DELETED);
 			state.setInt(2, idBook);
 			int update = state.executeUpdate();

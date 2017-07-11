@@ -1,6 +1,9 @@
 package by.rdtc.library.controller;
 
 import org.testng.annotations.Test;
+
+import by.rdtc.library.bean.User;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
@@ -16,43 +19,150 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterSuite;
 
 public class ControllerTest {
-	private Controller controller = new Controller();
+	private Controller controller;
+	private User user;
 
-	@Test(dataProvider = "sign_in")
+	@BeforeMethod(groups = { "guest" })
+	public void beforeGuestMethod() {
+		controller = new Controller();
+	}
+	
+	@BeforeMethod(groups = { "user" })
+	public void beforeUserMethod() {
+		controller = new Controller();
+		user = new User();
+		user.setId(6);
+		user.setLogin("orderuser");
+		user.setType("user");
+		Controller.setUser(user);
+	}
+	
+	@BeforeMethod(groups = { "admin" })
+	public void beforeAdminMethod() {
+		controller = new Controller();
+		user = new User();
+		user.setId(1);
+		user.setLogin("donald44");
+		user.setType("admin");
+		Controller.setUser(user);
+	}
+	
+	@BeforeMethod(groups = { "super_admin" })
+	public void beforeSuperAdminMethod() {
+		controller = new Controller();
+		user = new User();
+		user.setId(3);
+		user.setLogin("supadmin");
+		user.setType("super_admin");
+		Controller.setUser(user);
+	}
+
+	@AfterMethod(groups = { "guest" })
+	public void afterGuestMethod() {
+		controller = null;
+	}
+	
+	@AfterMethod(groups = { "user","admin","super_admin" })
+	public void afterMethod() {
+		user = null;
+		controller = null;
+	}
+	
+	@Test(groups={"guest"},dataProvider = "sign_in")
 	public void tstSignIn(String request, String expResponse) {
 		String response = controller.executeTask(request);
-		Assert.assertEquals(expResponse, response);
+		Assert.assertEquals(response, expResponse);
 	}
 
-	@Test(dataProvider = "registration")
+	@Test(groups={"guest"},dataProvider = "registration")
 	public void tstRegistration(String request, String expResponse) {
 		String response = controller.executeTask(request);
-		Assert.assertEquals(expResponse, response);
+		Assert.assertEquals(response, expResponse);
 	}
-
-	@Test(dataProvider = "show_profile")
-	public void tstShowProfile(String request, String expResponse) {
+	
+	@Test(groups={"user"},dataProvider = "order_book")
+	public void tstOrderBook(String request, String expResponse) {
 		String response = controller.executeTask(request);
-		Assert.assertEquals(expResponse, response);
+		Assert.assertEquals(response, expResponse);
 	}
-
-	@Test(dataProvider = "edit_profile")
+	
+	@Test(groups={"user"},dataProvider = "cancel_order")
+	public void tstCancelOrder(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"user"},dataProvider = "edit_profile")
 	public void tstEditProfile(String request, String expResponse) {
 		String response = controller.executeTask(request);
-		Assert.assertEquals(expResponse, response);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"user"}, dataProvider = "show_profile")
+	public void tstShowProfile(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"user"}, dataProvider = "view_book")
+	public void tstViewBook(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups="admin",dataProvider = "ban_user")
+	public void tstBanUser(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "unban_user")
+	public void tstUnBanUser(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "add_book")
+	public void tstAddBook(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "confirm_return")
+	public void tstConfirmReturn(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "delete_book")
+	public void tstDeleteBook(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "delivery_order")
+	public void tstDeliveryOrder(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "edit_book")
+	public void tstEditBook(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
+	
+	@Test(groups={"admin"},dataProvider = "user_to_admin")
+	public void tstUserToAdmin(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
 	}
 
-	/*
-	 * @BeforeMethod(groups={"hello"}) public void beforeMethod() {
-	 * 
-	 * }
-	 * 
-	 * 
-	 * 
-	 * @AfterMethod public void afterMethod() {
-	 * 
-	 * }
-	 */
+	@Test(groups={"super_admin"},dataProvider = "admin_to_user")
+	public void tstAdminToUser(String request, String expResponse) {
+		String response = controller.executeTask(request);
+		Assert.assertEquals(response, expResponse);
+	}
 
 	@DataProvider(name = "sign_in")
 	public Object[][] dataForSignIn() {
@@ -61,7 +171,6 @@ public class ControllerTest {
 				new Object[] { "sign_in&login=kuzorka&", "Wrong number of parameters" },
 				new Object[] { "sign_in&login=kuzorka&password=", "Error during sign_in procedure" },
 				new Object[] { "sign_in&&password=Qwerty1", "Wrong number of parameters" },
-				new Object[] { "sign_in", "Invalid request" },
 				new Object[] { "sign_in&", "Wrong number of parameters" },
 				new Object[] { "sign_i&login=donald44&password=Me12345", "Wrong command" }, };
 	}
@@ -83,20 +192,25 @@ public class ControllerTest {
 	@DataProvider(name = "edit_profile")
 	public Object[][] dataForEditProfile() {
 		return new Object[][] { //
-				new Object[] { "edit_profile&name=RICK&surname=GENDOLF", "Successful registration" },
-				new Object[] { "edit_profile&name=John&surname=Dorian", "Error during registration procedure" },
-				new Object[] { "edit_profile&name=John&surname=Dorian", "Wrong number of parameters" },
-				new Object[] { "edit_profile&name=John&surname=Dorian", "Wrong number of parameters" },
-				new Object[] { "edit_profile&name=John&surname=Dorian", "Wrong number of parameters" }, };
+				new Object[] { "edit_profile&name=EDITED&surname=EDITED", "Profile is updated successfully" },
+				new Object[] { "edit_profile&name=&surname=", "Error during edit profile procedure" },
+				new Object[] { "edit_profile&name=John&", "Wrong number of parameters" },
+				new Object[] { "edit_profile&", "Wrong number of parameters" }, };
 	}
 
 	@DataProvider(name = "show_profile")
 	public Object[][] dataForShowProfile() {
 		return new Object[][] { //
-				new Object[] { "show_profile&", "Successful registration" }, };
+				new Object[] { "show_profile&", "login=orderuser\nname=EDITED\nsurname=EDITED\ntype=user" }, };
+	}
+	
+	@DataProvider(name = "view_book")
+	public Object[][] dataForViewBook() {
+		return new Object[][] { //
+				new Object[] { "view_book&idBook=1", "id=1\ttitle=WorldWide\tauthor=Gibbons\tstatus=on_shelf\n" }, };
 	}
 
-	@DataProvider(name = "addBook")
+	@DataProvider(name = "add_book")
 	public Object[][] dataForAddBook() {
 		return new Object[][] { //
 				new Object[] { "add_book&title=WorldWide&author=Gibbons", "Successful registration" },
@@ -137,15 +251,16 @@ public class ControllerTest {
 		return new Object[][] { //
 				new Object[] { "delivery_order&idOrder=1", "Book is delivered" },
 				new Object[] { "delivery_order&idOrder=15", "Error during delivery order procedure" },
-				new Object[] { "delivery_order&idOrder=", "Error during delivery order procedure" },
+				new Object[] { "delivery_order&idOrder=", "Invalid parameters" },
 				new Object[] { "delivery_order&", "Wrong number of parameters" }, };
 	}
 
 	@DataProvider(name = "confirm_return")
 	public Object[][] dataForConfirmReturn() {
 		return new Object[][] { //
-				new Object[] { "return_book&idOrder=2", "Book is returned" },
-				new Object[] { "return_book&idOrder=", "Error during return book procedure" },
+				new Object[] { "return_book&idOrder=4", "Book is returned" },
+				new Object[] { "return_book&idOrder=5", "Error during return book procedure" },
+				new Object[] { "return_book&idOrder=", "Invalid parameters" },
 				new Object[] { "return_book&", "Wrong number of parameters" }, };
 	}
 
@@ -154,7 +269,7 @@ public class ControllerTest {
 		return new Object[][] { //
 				new Object[] { "delete_book&idBook=4", "Book is deleted" },
 				new Object[] { "delete_book&idBook=5", "Error during delete book procedure" },
-				new Object[] { "delete_book&idBook=", "Error during delete book procedure" },
+				new Object[] { "delete_book&idBook=", "Invalid parameters" },
 				new Object[] { "delete_book&", "Wrong number of parameters" }, };
 	}
 
@@ -163,7 +278,7 @@ public class ControllerTest {
 		return new Object[][] { //
 				new Object[] { "order_book&idBook=6", "The book is ordered" },
 				new Object[] { "order_book&idBook=7", "Error during order book procedure" },
-				new Object[] { "order_book&idBook=", "Error during order book procedure" },
+				new Object[] { "order_book&idBook=", "Invalid parameters" },
 				new Object[] { "order_book&", "Wrong number of parameters" }, };
 	}
 
@@ -172,7 +287,7 @@ public class ControllerTest {
 		return new Object[][] { //
 				new Object[] { "cancel_order&idOrder=2", "Order is closed successfully" },
 				new Object[] { "cancel_order&idOrder=3", "Error during cancel order procedure" },
-				new Object[] { "cancel_order&idOrder=", "Error during cancel order procedure" },
+				new Object[] { "cancel_order&idOrder=", "Invalid parameters" },
 				new Object[] { "cancel_order&", "Wrong number of parameters" }, };
 	}
 
@@ -184,19 +299,14 @@ public class ControllerTest {
 				new Object[] { "edit_book&idBook=9&title=&author=", "Error during edit book procedure" },
 				new Object[] { "edit_book&", "Wrong number of parameters" }, };
 	}
-
-	/*
-	 * @BeforeClass public void beforeClass() { }
-	 * 
-	 * @AfterClass public void afterClass() { }
-	 * 
-	 * @BeforeTest public void beforeTest() { }
-	 * 
-	 * @AfterTest public void afterTest() { }
-	 * 
-	 * @BeforeSuite public void beforeSuite() { }
-	 * 
-	 * @AfterSuite public void afterSuite() { }
-	 */
+	
+	@DataProvider(name = "admin_to_user")
+	public Object[][] dataForRemoveAdmin() {
+		return new Object[][] { //
+				new Object[] { "remove_admin&login=admintouser", "User admintouser is deprived of admin role" },
+				new Object[] { "remove_admin&login=orderuser", "Error during adminToUser procedure" },
+				new Object[] { "remove_admin&login=", "Error during adminToUser procedure" },
+				new Object[] { "remove_admin&", "Wrong number of parameters" },};
+	}
 
 }

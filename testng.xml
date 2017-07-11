@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <suite name="Suite" parallel="false">  
+ <test name="SampleTestOne">    
+ <classes>     
+ <class name="environment.tstAllNGFixturesExampleOne"/> 
+ <class name="environment.tstAllNGFixturesExampleTwo"/>   
+ </classes> 
+ </test> 
+ <test name="SampleTestTwo">  
+ <classes> 
+ <class name="environment.tstAllNGFixturesExampleTwo"> 
+ <methods>    
+ <exclude name="tstTest1" />  
+ </methods>    
+ </class>  
+ </classes> 
+ </test> 
+ <test name="SampleTestThree"> 
+ <groups>    
+ <run>      
+ <include name="windows.*"/>   
+ </run>   
+ </groups>
+ <classes>     
+ <class name="environment.tstAllNGFixturesExampleTwo"/>  
+ </classes> 
+ </test> 
+ </suite> 
