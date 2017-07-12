@@ -27,6 +27,7 @@ public class SQLBookDAO implements BookDAO {
 	public void addBook(Book book) throws DAOException {
 		Connection connect = null;
 		PreparedStatement state = null;
+		
 		try {
 			connect = SQLDBWorker.getInstance().getConnection();
 			state = connect.prepareStatement(ADD_BOOK);
@@ -38,6 +39,7 @@ public class SQLBookDAO implements BookDAO {
 				return;
 			}
 			throw new DAOException("Wrong book data");
+			
 		} catch (SQLException e) {
 			throw new DAOException("Add book sql error", e);
 		}
@@ -45,13 +47,13 @@ public class SQLBookDAO implements BookDAO {
 
 	@Override
 	public Book getBookById(int idBook) throws DAOException {
-		Connection connect = null;
+		Connection connection = null;
 		PreparedStatement state = null;
 		ResultSet rs = null;
 
 		try {
-			connect = SQLDBWorker.getInstance().getConnection();
-			state = connect.prepareStatement(SELECT_BOOK);
+			connection = SQLDBWorker.getInstance().getConnection();
+			state = connection.prepareStatement(SELECT_BOOK);
 			state.setInt(1, idBook);
 			rs = state.executeQuery();
 			if (!rs.next()) {
@@ -66,16 +68,19 @@ public class SQLBookDAO implements BookDAO {
 
 		} catch (SQLException e) {
 			throw new DAOException("Get book sql error", e);
+		}finally {
+			SQLDBWorker.getInstance().closeConnection(connection, state, rs);
 		}
 	}
 
 	@Override
 	public void updateBook(Book book) throws DAOException {
-		Connection connect = null;
+		Connection connection = null;
 		PreparedStatement state = null;
+		
 		try {
-			connect = SQLDBWorker.getInstance().getConnection();
-			state = connect.prepareStatement(UPDATE_BOOK);
+			connection = SQLDBWorker.getInstance().getConnection();
+			state = connection.prepareStatement(UPDATE_BOOK);
 			state.setString(1, book.getTitle());
 			state.setString(2, book.getAuthor());
 			state.setInt(3, book.getId());
@@ -84,18 +89,22 @@ public class SQLBookDAO implements BookDAO {
 				return;
 			}
 			throw new DAOException("Wrong book data");
+			
 		} catch (SQLException e) {
 			throw new DAOException("Add book sql error", e);
+		}finally {
+			SQLDBWorker.getInstance().closeConnection(connection, state);
 		}
 	}
 
 	@Override
 	public void deleteBook(int idBook) throws DAOException {
-		Connection connect = null;
+		Connection connection = null;
 		PreparedStatement state = null;
+		
 		try {
-			connect = SQLDBWorker.getInstance().getConnection();
-			state = connect.prepareStatement(DELETE_BOOK);
+			connection = SQLDBWorker.getInstance().getConnection();
+			state = connection.prepareStatement(DELETE_BOOK);
 			state.setString(1, DELETED);
 			state.setInt(2, idBook);
 			int update = state.executeUpdate();
@@ -103,19 +112,23 @@ public class SQLBookDAO implements BookDAO {
 				return;
 			}
 			throw new DAOException("Wrong book data");
+			
 		} catch (SQLException e) {
 			throw new DAOException("Delete book sql error");
+		}finally {
+			SQLDBWorker.getInstance().closeConnection(connection, state);
 		}
 	}
 
 	@Override
 	public List<Book> showAllBooks() throws DAOException {
-		Connection connect = null;
+		Connection connection = null;
 		PreparedStatement state = null;
 		ResultSet rs = null;
+		
 		try {
-			connect = SQLDBWorker.getInstance().getConnection();
-			state = connect.prepareStatement(SHOW_ALL_BOOKS);
+			connection = SQLDBWorker.getInstance().getConnection();
+			state = connection.prepareStatement(SHOW_ALL_BOOKS);
 			rs = state.executeQuery();
 			List<Book> books = new ArrayList<>();
 			Book book;
@@ -128,8 +141,11 @@ public class SQLBookDAO implements BookDAO {
 				books.add(book);
 			}
 			return books;
+			
 		} catch (SQLException e) {
 			throw new DAOException("Get list of book sql error");
+		}finally {
+			SQLDBWorker.getInstance().closeConnection(connection, state, rs);
 		}
 	}
 }
