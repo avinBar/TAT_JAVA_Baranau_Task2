@@ -21,6 +21,7 @@ import org.testng.annotations.AfterSuite;
 public class ControllerTest {
 	private Controller controller;
 	private User user;
+	private String response;
 
 	@BeforeMethod(groups = { "guest" })
 	public void beforeGuestMethod() {
@@ -70,97 +71,97 @@ public class ControllerTest {
 	
 	@Test(groups={"guest"},dataProvider = "sign_in")
 	public void tstSignIn(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 
 	@Test(groups={"guest"},dataProvider = "registration")
 	public void tstRegistration(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"user"},dataProvider = "order_book")
 	public void tstOrderBook(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"user"},dataProvider = "cancel_order")
 	public void tstCancelOrder(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"user"},dataProvider = "edit_profile")
 	public void tstEditProfile(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"user"}, dataProvider = "show_profile")
 	public void tstShowProfile(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"user"}, dataProvider = "view_book")
 	public void tstViewBook(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups="admin",dataProvider = "ban_user")
 	public void tstBanUser(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "unban_user")
 	public void tstUnBanUser(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "add_book")
 	public void tstAddBook(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "confirm_return")
 	public void tstConfirmReturn(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "delete_book")
 	public void tstDeleteBook(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "delivery_order")
 	public void tstDeliveryOrder(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "edit_book")
 	public void tstEditBook(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 	
 	@Test(groups={"admin"},dataProvider = "user_to_admin")
 	public void tstUserToAdmin(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 
 	@Test(groups={"super_admin"},dataProvider = "admin_to_user")
 	public void tstAdminToUser(String request, String expResponse) {
-		String response = controller.executeTask(request);
+		response = controller.executeTask(request);
 		Assert.assertEquals(response, expResponse);
 	}
 
@@ -213,7 +214,7 @@ public class ControllerTest {
 	@DataProvider(name = "add_book")
 	public Object[][] dataForAddBook() {
 		return new Object[][] { //
-				new Object[] { "add_book&title=WorldWide&author=Gibbons", "Successful registration" },
+				new Object[] { "add_book&title=WorldWide&author=Gibbons", "Book is added" },
 				new Object[] { "add_book&title=&author=", "Error during add book procedure" },
 				new Object[] { "add_book&&author=Gibbons", "Wrong number of parameters" },
 				new Object[] { "add_book&title=WorldWide&", "Wrong number of parameters" }, };

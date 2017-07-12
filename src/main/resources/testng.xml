@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite" parallel="false">
+	<test name="GuestTest">
+		<groups>
+			<run>
+				<include name="guest" />
+			</run>
+		</groups>
+		<classes>
+			<class name="by.rdtc.library.controller.ControllerTest" />
+		</classes>
+	</test>
+	<test name="UserTest">
+		<groups>
+			<run>
+				<include name="user" />
+			</run>
+		</groups>
+		<classes>
+			<class name="by.rdtc.library.controller.ControllerTest" />
+		</classes>
+	</test>
+	<test name="AdminTest">
+		<groups>
+			<run>
+				<include name="admin" />
+			</run>
+		</groups>
+		<classes>
+			<class name="by.rdtc.library.controller.ControllerTest" />
+		</classes>
+	</test>
+	<test name="SuperAdminTest">
+		<groups>
+			<run>
+				<include name="super_admin" />
+			</run>
+		</groups>
+		<classes>
+			<class name="by.rdtc.library.controller.ControllerTest" />
+		</classes>
+	</test>
+</suite> 
